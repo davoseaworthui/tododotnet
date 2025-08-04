@@ -1,38 +1,57 @@
-.add-todo-card {
+.add-todo-dialog {
+  min-width: 400px;
+  
+  h2[mat-dialog-title] {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #1976d2;
     margin-bottom: 20px;
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
     
-    mat-card-title {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 1.2em;
+    mat-icon {
+      font-size: 24px;
     }
   }
+}
+
+[mat-dialog-content] {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-height: 200px;
+  padding-bottom: 20px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.priority-field {
+  width: 100%;
+}
+
+[mat-dialog-actions] {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 20px;
   
-  .full-width {
-    width: 100%;
-    margin-bottom: 12px;
+  button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
-  
-  .priority-field {
-    width: 200px;
-    margin-bottom: 16px;
+}
+
+mat-form-field {
+  mat-icon[matPrefix] {
+    color: #666;
+    margin-right: 8px;
   }
-  
-  .button-container {
-    text-align: center;
-    padding-top: 8px;
-    
-    button {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-  }
-  
-  mat-card-content {
-    padding: 16px;
-  }
+}
+
+mat-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}

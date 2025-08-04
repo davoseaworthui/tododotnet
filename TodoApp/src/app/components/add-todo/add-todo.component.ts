@@ -9,6 +9,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
+import { MatDialogRef } from '@angular/material/dialog'; // ADD THIS
 
 import { TodoService } from '../../services/todo.service';
 import { CreateTodoDto } from '../../models/todo.models';
@@ -26,22 +27,25 @@ import { CreateTodoDto } from '../../models/todo.models';
     MatSelectModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatIconModule
+    MatIconModule,
   ],
   templateUrl: './add-todo.component.html',
-  styleUrl: './add-todo.component.scss'
+  styleUrl: './add-todo.component.scss',
 })
 export class AddTodoComponent {
   newTodo: CreateTodoDto = {
     title: '',
     description: '',
     priority: 1,
-    dueDate: undefined
+    dueDate: undefined,
   };
 
   isSubmitting = false;
 
-  constructor(private todoService: TodoService) {}
+  constructor(
+    private todoService: TodoService,
+    private dialogRef: MatDialogRef<AddTodoComponent> // ADD THIS
+  ) {}
 
   onSubmit() {
     if (!this.newTodo.title.trim()) {
@@ -53,30 +57,31 @@ export class AddTodoComponent {
     this.todoService.createTodo(this.newTodo).subscribe({
       next: (createdTodo) => {
         console.log('Todo created:', createdTodo);
-        // Reset form
-        this.newTodo = {
-          title: '',
-          description: '',
-          priority: 1,
-          dueDate: undefined
-        };
         this.isSubmitting = false;
-        // Emit event to parent component to refresh list
-        window.location.reload(); // Simple refresh for now
+        this.dialogRef.close('created'); // CHANGE THIS LINE
       },
       error: (error) => {
         console.error('Error creating todo:', error);
         this.isSubmitting = false;
-      }
+      },
     });
+  }
+
+  // ADD THIS METHOD
+  onCancel() {
+    this.dialogRef.close(); // Close dialog without creating
   }
 
   getPriorityText(priority: number): string {
     switch (priority) {
-      case 1: return 'Low';
-      case 2: return 'Medium';
-      case 3: return 'High';
-      default: return 'Low';
+      case 1:
+        return 'Low';
+      case 2:
+        return 'Medium';
+      case 3:
+        return 'High';
+      default:
+        return 'Low';
     }
   }
 }

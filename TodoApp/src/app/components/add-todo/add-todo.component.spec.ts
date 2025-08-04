@@ -1,23 +1,73 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDialogRef } from '@angular/material/dialog'; // Add this import
 
-import { AddTodoComponent } from './add-todo.component';
+import { TodoService } from '../../services/todo.service';
+import { CreateTodoDto } from '../../models/todo.models';
 
-describe('AddTodoComponent', () => {
-  let component: AddTodoComponent;
-  let fixture: ComponentFixture<AddTodoComponent>;
+@Component({
+  selector: 'app-add-todo',
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatIconModule,
+  ],
+  templateUrl: './add-todo.component.html',
+  styleUrl: './add-todo.component.scss',
+})
+export class AddTodoComponent {
+  newTodo: CreateTodoDto = {
+    title: '',
+    description: '',
+    priority: 1,
+    dueDate: undefined,
+  };
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [AddTodoComponent]
-    })
-    .compileComponents();
+  isSubmitting = false;
 
-    fixture = TestBed.createComponent(AddTodoComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+  constructor(
+    private todoService: TodoService,
+    private dialogRef: MatDialogRef<AddTodoComponent> // Add this injection
+  ) {}
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+  onSubmit() {
+    if (!this.newTodo.title.trim()) {
+      return;
+    }
+
+    this.isSubmitting = true;
+
+    this.todoService.createTodo(this.newTodo).subscribe({
+      next: (createdTodo) => {
+        console.log('Todo created:', createdTodo);
+        this.isSubmitting = false;
+        this.dialogRef.close('created'); // Close dialog and signal success
+      },
+      error: (error) => {
+        console.error('Error creating todo:', error);
+        this.isSubmitting = false;
+      },
+    });
+  }
+
+  onCancel() {
+    this.dialogRef.close(); // Close dialog without creating
+  }
+}

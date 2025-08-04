@@ -1,88 +1,98 @@
 <div class="todo-list-container">
+  <div class="header-section">
     <h1>My Todo List</h1>
-    
-    <!-- Loading spinner -->
-    <div *ngIf="loading" class="loading-container">
-      <mat-spinner></mat-spinner>
-      <p>Loading your todos...</p>
-    </div>
-  
-    <!-- Error message -->
-    <div *ngIf="error" class="error-container">
-      <mat-card color="warn">
-        <mat-card-content>
-          <mat-icon>error</mat-icon>
-          {{ error }}
-          <button mat-button (click)="loadTodos()">Try Again</button>
-        </mat-card-content>
-      </mat-card>
-    </div>
-  
-    <!-- Todo list -->
-    <div *ngIf="!loading && !error" class="todos-container">
-      
-      <!-- Empty state -->
-      <div *ngIf="todos.length === 0" class="empty-state">
-        <mat-card>
-          <mat-card-content>
-            <mat-icon>check_circle_outline</mat-icon>
-            <h2>No todos yet!</h2>
-            <p>Create your first todo to get started.</p>
-          </mat-card-content>
-        </mat-card>
-      </div>
-  
-      <!-- Todo items -->
-      <mat-card *ngFor="let todo of todos" class="todo-card" 
-                [class.completed]="todo.isCompleted"
-                [class.overdue]="todo.isOverdue">
-        
-        <mat-card-header>
-          <mat-card-title [class.completed-text]="todo.isCompleted">
-            {{ todo.title }}
-          </mat-card-title>
-          
-          <mat-card-subtitle>
-            <mat-chip [color]="getPriorityColor(todo.priority)">
-              {{ todo.priorityText }} Priority
-            </mat-chip>
-            
-            <span *ngIf="todo.dueDate" class="due-date">
-              Due: {{ todo.dueDate | date:'shortDate' }}
-            </span>
-            
-            <mat-chip *ngIf="todo.isOverdue" color="warn">
-              <mat-icon>warning</mat-icon>
-              Overdue
-            </mat-chip>
-          </mat-card-subtitle>
-        </mat-card-header>
-  
-        <mat-card-content>
-          <p *ngIf="todo.description" [class.completed-text]="todo.isCompleted">
-            {{ todo.description }}
-          </p>
-          
-          <div class="todo-meta">
-            <small>Created: {{ todo.createdAt | date:'short' }}</small>
-            <small *ngIf="todo.isCompleted">Completed: {{ todo.updatedAt | date:'short' }}</small>
-          </div>
-        </mat-card-content>
-  
-        <mat-card-actions>
-          <button mat-icon-button 
-                  [color]="todo.isCompleted ? 'primary' : 'accent'"
-                  (click)="toggleTodo(todo.id)"
-                  [matTooltip]="todo.isCompleted ? 'Mark as incomplete' : 'Mark as complete'">
-            <mat-icon>{{ todo.isCompleted ? 'undo' : 'check' }}</mat-icon>
-          </button>
-          
-          <button mat-icon-button color="warn" 
-                  (click)="deleteTodo(todo.id)"
-                  matTooltip="Delete todo">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </mat-card-actions>
-      </mat-card>
-    </div>
+    <!-- Add Todo FAB Button -->
+    <button mat-fab 
+            color="primary" 
+            class="add-todo-fab"
+            (click)="openAddTodoDialog()"
+            matTooltip="Add new todo">
+      <mat-icon>add</mat-icon>
+    </button>
   </div>
+  
+  <!-- Loading spinner -->
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner></mat-spinner>
+    <p>Loading your todos...</p>
+  </div>
+
+  <!-- Error message -->
+  <div *ngIf="error" class="error-container">
+    <mat-card color="warn">
+      <mat-card-content>
+        <mat-icon>error</mat-icon>
+        {{ error }}
+        <button mat-button (click)="loadTodos()">Try Again</button>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Todo list -->
+  <div *ngIf="!loading && !error" class="todos-container">
+    
+    <!-- Empty state -->
+    <div *ngIf="todos.length === 0" class="empty-state">
+      <mat-card>
+        <mat-card-content>
+          <mat-icon>check_circle_outline</mat-icon>
+          <h2>No todos yet!</h2>
+          <p>Click the + button to create your first todo.</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Todo items -->
+    <mat-card *ngFor="let todo of todos" class="todo-card" 
+              [class.completed]="todo.isCompleted"
+              [class.overdue]="todo.isOverdue">
+      
+      <mat-card-header>
+        <mat-card-title [class.completed-text]="todo.isCompleted">
+          {{ todo.title }}
+        </mat-card-title>
+        
+        <mat-card-subtitle>
+          <mat-chip [color]="getPriorityColor(todo.priority)">
+            {{ todo.priorityText }} Priority
+          </mat-chip>
+          
+          <span *ngIf="todo.dueDate" class="due-date">
+            Due: {{ todo.dueDate | date:'shortDate' }}
+          </span>
+          
+          <mat-chip *ngIf="todo.isOverdue" color="warn">
+            <mat-icon>warning</mat-icon>
+            Overdue
+          </mat-chip>
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <p *ngIf="todo.description" [class.completed-text]="todo.isCompleted">
+          {{ todo.description }}
+        </p>
+        
+        <div class="todo-meta">
+          <small>Created: {{ todo.createdAt | date:'short' }}</small>
+          <small *ngIf="todo.isCompleted">Completed: {{ todo.updatedAt | date:'short' }}</small>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button mat-icon-button 
+                [color]="todo.isCompleted ? 'primary' : 'accent'"
+                (click)="toggleTodo(todo.id)"
+                [matTooltip]="todo.isCompleted ? 'Mark as incomplete' : 'Mark as complete'">
+          <mat-icon>{{ todo.isCompleted ? 'undo' : 'check' }}</mat-icon>
+        </button>
+        
+        <button mat-icon-button color="warn" 
+                (click)="deleteTodo(todo.id)"
+                matTooltip="Delete todo">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>
