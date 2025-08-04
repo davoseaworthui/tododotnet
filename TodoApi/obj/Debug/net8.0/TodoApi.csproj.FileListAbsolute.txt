@@ -157,3 +157,4 @@ C:\Users\david\todo angular net\TodoApi\obj\Debug\net8.0\refint\TodoApi.dll
 C:\Users\david\todo angular net\TodoApi\obj\Debug\net8.0\TodoApi.pdb
 C:\Users\david\todo angular net\TodoApi\obj\Debug\net8.0\TodoApi.genruntimeconfig.cache
 C:\Users\david\todo angular net\TodoApi\obj\Debug\net8.0\ref\TodoApi.dll
+C:\Users\david\todo angular net\TodoApi\obj\Debug\net8.0\TodoApi.sourcelink.json

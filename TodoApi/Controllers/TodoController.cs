@@ -139,7 +139,69 @@ namespace TodoApi.Controllers
             });
         }
 
-        // Add your other existing methods (PUT, DELETE, etc.) here...
+        /// <summary>
+        /// PUT api/todo/{id} - Update entire todo
+        /// </summary>
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateTodo(int id, UpdateTodoDto updateTodoDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var existingTodo = await _repository.GetByIdAsync(id);
+            if (existingTodo == null)
+            {
+                return NotFound($"Todo with ID {id} not found.");
+            }
+
+            // Update the todo properties
+            existingTodo.Title = updateTodoDto.Title;
+            existingTodo.Description = updateTodoDto.Description;
+            existingTodo.IsCompleted = updateTodoDto.IsCompleted;
+            existingTodo.DueDate = updateTodoDto.DueDate;
+            existingTodo.Priority = updateTodoDto.Priority;
+            existingTodo.UpdatedAt = DateTime.UtcNow;
+
+            await _repository.UpdateAsync(existingTodo);
+            return NoContent(); // 204 No Content
+        }
+
+        /// <summary>
+        /// PATCH api/todo/{id}/toggle - Toggle completion status
+        /// </summary>
+        [HttpPatch("{id}/toggle")]
+        public async Task<ActionResult<TodoDto>> ToggleTodo(int id)
+        {
+            var todo = await _repository.GetByIdAsync(id);
+            if (todo == null)
+            {
+                return NotFound($"Todo with ID {id} not found.");
+            }
+
+            todo.IsCompleted = !todo.IsCompleted;
+            todo.UpdatedAt = DateTime.UtcNow;
+
+            await _repository.UpdateAsync(todo);
+            return Ok(MapToDto(todo));
+        }
+
+        /// <summary>
+        /// DELETE api/todo/{id} - Delete a specific todo
+        /// </summary>
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteTodo(int id)
+        {
+            var success = await _repository.DeleteAsync(id);
+            
+            if (!success)
+            {
+                return NotFound($"Todo with ID {id} not found.");
+            }
+
+            return NoContent(); // 204 No Content
+        }
 
         private static TodoDto MapToDto(Todo todo)
         {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -25,15 +25,18 @@ import { AddTodoComponent } from '../add-todo/add-todo.component';
     MatTooltipModule,
     MatDialogModule,
   ],
+
   templateUrl: './todo-list.component.html',
   styleUrl: './todo-list.component.scss',
 })
 export class TodoListComponent implements OnInit {
+  // Modern dependency injection using inject() function
+  private todoService = inject(TodoService);
+  private dialog = inject(MatDialog);
+
   todos: Todo[] = [];
   loading = true;
   error: string | null = null;
-
-  constructor(private todoService: TodoService, private dialog: MatDialog) {}
 
   ngOnInit() {
     this.loadTodos();

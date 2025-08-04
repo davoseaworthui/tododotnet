@@ -4,17 +4,17 @@ import { Observable } from 'rxjs';
 import { Todo, CreateTodoDto, UpdateTodoDto, TodoFilterDto, TodoStats } from '../models/todo.models';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root', // Makes TodoService a singleton available throughout the app
 })
 export class TodoService {
   private apiUrl = 'http://localhost:5255/api/todo'; // Your .NET API URL
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   // Get all todos with optional filtering
   getTodos(filter?: TodoFilterDto): Observable<Todo[]> {
     let params = new HttpParams();
-    
+
     if (filter) {
       if (filter.isCompleted !== undefined) {
         params = params.set('isCompleted', filter.isCompleted.toString());

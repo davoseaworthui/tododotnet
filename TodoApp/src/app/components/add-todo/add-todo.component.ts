@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -9,7 +9,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
-import { MatDialogRef } from '@angular/material/dialog'; // ADD THIS
+import { MatDialogRef } from '@angular/material/dialog';
 
 import { TodoService } from '../../services/todo.service';
 import { CreateTodoDto } from '../../models/todo.models';
@@ -29,10 +29,15 @@ import { CreateTodoDto } from '../../models/todo.models';
     MatNativeDateModule,
     MatIconModule,
   ],
+
   templateUrl: './add-todo.component.html',
   styleUrl: './add-todo.component.scss',
 })
 export class AddTodoComponent {
+  // Modern dependency injection using inject() function
+  private todoService = inject(TodoService);
+  private dialogRef = inject(MatDialogRef<AddTodoComponent>);
+
   newTodo: CreateTodoDto = {
     title: '',
     description: '',
@@ -41,11 +46,6 @@ export class AddTodoComponent {
   };
 
   isSubmitting = false;
-
-  constructor(
-    private todoService: TodoService,
-    private dialogRef: MatDialogRef<AddTodoComponent> // ADD THIS
-  ) {}
 
   onSubmit() {
     if (!this.newTodo.title.trim()) {
