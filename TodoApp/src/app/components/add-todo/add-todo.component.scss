@@ -1,0 +1,38 @@
+.add-todo-card {
+    margin-bottom: 20px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    
+    mat-card-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.2em;
+    }
+  }
+  
+  .full-width {
+    width: 100%;
+    margin-bottom: 12px;
+  }
+  
+  .priority-field {
+    width: 200px;
+    margin-bottom: 16px;
+  }
+  
+  .button-container {
+    text-align: center;
+    padding-top: 8px;
+    
+    button {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+  }
+  
+  mat-card-content {
+    padding: 16px;
+  }
